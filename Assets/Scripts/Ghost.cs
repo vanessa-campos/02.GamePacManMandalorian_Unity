@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class Ghost : MonoBehaviour
 {
-    [HideInInspector] public Pacman pacman;
-    [HideInInspector] public GameController GC;
-    SpriteRenderer spriteColor;
-    private float speed = .15f;
     public Transform[] waypoints;
-    int cur = 0;
+
+    private Rigidbody2D _rigidbody;
+    private SpriteRenderer spriteColor;
+    private Pacman pacman;
+    private float speed = .15f;
+    private int cur = 0;
 
     private void Start()
     {
+        _rigidbody = GetComponent<Rigidbody2D>();
         spriteColor = GetComponent<SpriteRenderer>();
+        pacman = FindObjectOfType<Pacman>();
     }
 
     void FixedUpdate()
@@ -21,10 +24,8 @@ public class Ghost : MonoBehaviour
         // Waypoint not reached yet? then move closer
         if (transform.position != waypoints[cur].position)
         {
-            Vector2 p = Vector2.MoveTowards(transform.position,
-                                            waypoints[cur].position,
-                                            speed);
-            GetComponent<Rigidbody2D>().MovePosition(p);
+            Vector2 p = Vector2.MoveTowards(transform.position, waypoints[cur].position, speed);
+            _rigidbody.MovePosition(p);
         }
         // Waypoint reached, select next one
         else cur = (cur + 1) % waypoints.Length;
@@ -34,41 +35,26 @@ public class Ghost : MonoBehaviour
             LowVelocity();
             ChangeColor();
         }
-        if (!pacman.powerful)
-        {            
-            spriteColor.color = Color.red;
-        }
-    }
-
-    public void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.tag == "Player" && pacman.powerful == false)
+        else
         {
-            Destroy(other.gameObject);
-            GC.GameOver();
-        }
-        if (other.tag == "Player" && pacman.powerful)
-        {
-            Destroy(gameObject);
+            spriteColor.color = Color.white;
         }
     }
 
     void LowVelocity()
     {
+        // Waypoint not reached yet? then move closer
         if (transform.position != waypoints[cur].position)
         {
-            Vector2 p = Vector2.MoveTowards(transform.position,
-                                            waypoints[cur].position,
-                                            (speed * .5f));
-            GetComponent<Rigidbody2D>().MovePosition(p);
+            Vector2 p = Vector2.MoveTowards(transform.position, waypoints[cur].position, speed * .5f);
+            _rigidbody.MovePosition(p);
         }
         // Waypoint reached, select next one
         else cur = (cur + 1) % waypoints.Length;
     }
-    
+
     void ChangeColor()
     {
-        spriteColor.color = Color.blue;
+        spriteColor.color = Color.green;
     }
-
 }

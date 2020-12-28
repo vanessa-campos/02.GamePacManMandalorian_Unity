@@ -6,11 +6,13 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     public Text gameOverText;
-    public Text restartText; 
+    public Text restartText;
     public Text wonText;
+
     private bool gameOver;
-    private bool restart; 
+    private bool restart;
     private bool won;
+
     private Ghost[] ghosts;
 
     private void Awake()
@@ -49,7 +51,8 @@ public class GameController : MonoBehaviour
         gameOver = true;
     }
     public void Win()
-    {     
-        
+    {
+        wonText.text = "WON";
+        won = true;
     }
 }
