@@ -9,14 +9,16 @@ public class GameController : MonoBehaviour
     public Text restartText;
     public Text wonText;
 
+    public AudioSource gameSound;
+    public AudioSource gameOverSound;
+
     private bool gameOver;
     private bool restart;
     private bool won;
 
-    private Ghost[] ghosts;
-
     private void Awake()
     {
+        gameSound.Play();
         gameOver = false;
         restart = false;
         won = false;
@@ -49,6 +51,8 @@ public class GameController : MonoBehaviour
     {
         gameOverText.text = "GAME OVER";
         gameOver = true;
+        gameSound.Stop();
+        gameOverSound.Play();
     }
     public void Win()
     {

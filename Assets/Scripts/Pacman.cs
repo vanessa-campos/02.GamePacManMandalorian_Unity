@@ -5,17 +5,19 @@ using UnityEngine.UI;
 
 public class Pacman : MonoBehaviour
 {
+    public bool powerful;
     public float speed = 5;
     public float time;    
     public Transform[] border = new Transform[4];
     public Text timeText;
     public Text pointsText;
+    
+    public AudioSource bonusSound;
+    public AudioSource ghostSound;
 
-    private int points;
-
-    public bool powerful;
+    private int points;    
     private int enemyDestroyed = 0;
-    public int dots = 0;
+    private int dots = 0;
 
     private Rigidbody2D _rigidbody;
     private Animator _animator;
@@ -45,6 +47,7 @@ public class Pacman : MonoBehaviour
             {
                 time = 0;
                 powerful = false;
+                ghostSound.Stop();
             }
             
             time += Time.deltaTime; 
@@ -92,9 +95,11 @@ public class Pacman : MonoBehaviour
         // Check collision with the SuperDots and if so, activate powerful and destroy the object
         if (other.gameObject.CompareTag("Bonus"))
         {
-            powerful = true;
+            powerful = true; 
             time = 0;
-            Destroy(other.gameObject);
+            bonusSound.Play();
+            Destroy(other.gameObject); 
+            ghostSound.Play();
         }
 
         // Check collision with the Dots and if so, add 10 to points value and then destroy the object

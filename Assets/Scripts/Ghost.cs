@@ -6,11 +6,12 @@ public class Ghost : MonoBehaviour
 {
     public Transform[] waypoints;
 
+    private float speed = .15f;
+    private int cur = 0;
+
     private Rigidbody2D _rigidbody;
     private SpriteRenderer spriteColor;
     private Pacman pacman;
-    private float speed = .15f;
-    private int cur = 0;
 
     private void Start()
     {
@@ -33,7 +34,7 @@ public class Ghost : MonoBehaviour
         if (pacman.powerful)
         {
             LowVelocity();
-            ChangeColor();
+            ChangeColor();            
         }
         else
         {
