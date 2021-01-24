@@ -1,40 +1,43 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Pacman : MonoBehaviour
 {
-    public bool powerful;
+    [HideInInspector] public bool powerful;
+
     public float speed = 5;
     public float time;    
     public Transform[] border = new Transform[4];
-    public Text timeText;
-    public Text pointsText;
-    
+
     public AudioSource bonusSound;
-    public AudioSource ghostSound;
-
-    private int points;    
-    private int enemyDestroyed = 0;
-    private int dots = 0;
-
+    public AudioSource ghostSound;          
+    
     private Rigidbody2D _rigidbody;
     private Animator _animator;
-    private GameController GC;
+    private GameManager GM;
 
     /*
     private float horizontalInput;
     private float verticalInput;
     */
 
+    /*private float Time
+    {
+        get { return time; }
+        set
+        {
+            time = value;
+            GM.timeText.text = "LEVEL: " + time;
+        }
+    }*/        
+
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
-        GC = FindObjectOfType<GameController>();
+        GM = FindObjectOfType<GameManager>();
         time = 0;
-        points = 0;
     }
 
     void Update()
@@ -48,14 +51,9 @@ public class Pacman : MonoBehaviour
                 time = 0;
                 powerful = false;
                 ghostSound.Stop();
-            }
-            
-            time += Time.deltaTime; 
-            timeText.text = Mathf.Ceil(time).ToString();
+            }            
+            time += Time.deltaTime;
         }
-
-        // Updates points values to points text 
-        pointsText.text = points.ToString();
     }
 
     void FixedUpdate()
@@ -95,8 +93,8 @@ public class Pacman : MonoBehaviour
         // Check collision with the SuperDots and if so, activate powerful and destroy the object
         if (other.gameObject.CompareTag("Bonus"))
         {
-            powerful = true; 
             time = 0;
+            powerful = true; 
             bonusSound.Play();
             Destroy(other.gameObject); 
             ghostSound.Play();
@@ -105,8 +103,7 @@ public class Pacman : MonoBehaviour
         // Check collision with the Dots and if so, add 10 to points value and then destroy the object
         if (other.gameObject.CompareTag("Ponto"))
         {
-            points += 10;
-            dots++;
+            GM.Score += 10;
             Destroy(other.gameObject);
         }
 
@@ -116,28 +113,28 @@ public class Pacman : MonoBehaviour
         {
             if (powerful)
             {
-                points += 100;
-                enemyDestroyed++;
+                GM.Score += 100;
                 Destroy(other.gameObject);
             }
             else
             {
                 Destroy(gameObject);
-                GC.GameOver();
+                GM.Life -= 1;
             }
         }
 
         // Check if the player arrived at the endline and if it destroyed all the enemies or collected all the dots
         if (other.gameObject.CompareTag("Finish"))
         {
-            if(enemyDestroyed == 4)
+            if(GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
             {
                 Destroy(gameObject);
-                GC.Win();
+                GM.SwitchState(GameManager.State.LEVELCOMPLETED);
             }
-            if(dots == 327)
+            if(GameObject.FindGameObjectsWithTag("Ponto").Length == 0)
             {
-                GC.Win();
+                Destroy(gameObject);
+                GM.SwitchState(GameManager.State.LEVELCOMPLETED);
             }
         }
     }
