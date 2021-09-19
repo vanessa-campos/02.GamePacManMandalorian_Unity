@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     private GameObject _currentLevel;
     private GameObject _currentLife;
-    
+
     private int _score;
     public int Score
     {
@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
             scoreText.text = "SCORE: " + _score;
         }
     }
-    
+
     private int _level;
     public int Level
     {
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-      
+
     private int _life;
     public int Life
     {
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
             _life = value;
             lifesText.text = "LIFES: " + _life;
         }
-    }  
+    }
 
     public void PlayClicked()
     {
@@ -99,9 +99,9 @@ public class GameManager : MonoBehaviour
         {
             case State.MENU:
                 Cursor.visible = true;
-                highscoreText.text = "HIGHSCORE: " + PlayerPrefs.GetInt("highscore"); 
+                highscoreText.text = "HIGHSCORE: " + PlayerPrefs.GetInt("highscore");
                 panelMenu.SetActive(true);
-                gameSound.Play();                
+                gameSound.Play();
                 break;
             case State.INIT:
                 Cursor.visible = false;
@@ -118,9 +118,10 @@ public class GameManager : MonoBehaviour
             case State.PLAY:
                 break;
             case State.LEVELCOMPLETED:
-                Level++;
+                // Level++;
                 panelLevelCompleted.SetActive(true);
-                SwitchState(State.LOADLEVEL, 2f);
+                // SwitchState(State.LOADLEVEL, 2f);
+                SwitchState(State.MENU, 5);
                 break;
             case State.LOADLEVEL:
                 if (Level >= levels.Length)
@@ -154,7 +155,7 @@ public class GameManager : MonoBehaviour
             case State.INIT:
                 break;
             case State.PLAY:
-                if(Life == 0)
+                if (Life == 0)
                 {
                     SwitchState(State.GAMEOVER);
                 }
@@ -168,6 +169,8 @@ public class GameManager : MonoBehaviour
             case State.LOADLEVEL:
                 break;
             case State.GAMEOVER:
+
+                SwitchState(State.MENU, 5);
                 if (Input.anyKeyDown)
                 {
                     SwitchState(State.MENU);
@@ -196,7 +199,7 @@ public class GameManager : MonoBehaviour
             case State.LOADLEVEL:
                 break;
             case State.GAMEOVER:
-                panelGameOver.SetActive(false);   
+                panelGameOver.SetActive(false);
                 break;
         }
     }

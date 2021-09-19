@@ -59,19 +59,19 @@ public class Pacman : MonoBehaviour
     void FixedUpdate()
     {
         // Move - Capture arrow keys and move towards of borders points using speed
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
             _rigidbody.MovePosition(Vector2.MoveTowards(transform.position, border[0].position, speed));
         }
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
             _rigidbody.MovePosition(Vector2.MoveTowards(transform.position, border[1].position, speed));
         }
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
             _rigidbody.MovePosition(Vector2.MoveTowards(transform.position, border[2].position, speed));
         }
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
         {
             _rigidbody.MovePosition(Vector2.MoveTowards(transform.position, border[3].position, speed));
         }
